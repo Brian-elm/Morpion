@@ -1,89 +1,166 @@
-const X_CLASS = 'x';
-const CIRCLE_CLASS = 'circle';
-const WINNING_COMBINATIONS = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-];
-const cellElements = document.querySelectorAll('[data-cell]');
-const board = document.getElementById('board');
-const winningMessageElement = document.getElementById('winning-message');
-const restartButton = document.getElementById('restartButton');
-const winningMessageTextElement = document.querySelector('[data-winning-message-text]');
-let circleTurn;
+function estValide(button) {
+    return button.innerHTML.length == 0;
+  }
 
-startGame();
+  function setSymbol(btn, symbole) {
+    btn.innerHTML = symbole;
+  }
 
-restartButton.addEventListener('click', startGame);
-
-function startGame() {
-    circleTurn = false;
-    cellElements.forEach(cell => {
-        cell.classList.remove(X_CLASS);
-        cell.classList.remove(CIRCLE_CLASS);
-        cell.removeEventListener('click', handleClick);
-        cell.addEventListener('click', handleClick, { once: true });
-    });
-    setBoardHoverClass();
-    winningMessageElement.classList.remove('show');
-}
-
-function handleClick(e) {
-    const cell = e.target;
-    const currentClass = circleTurn ? CIRCLE_CLASS : X_CLASS;
-    placeMark(cell, currentClass);
-    if (checkWin(currentClass)) {
-        endGame(false);
-    } else if (isDraw()) {
-        endGame(true);
-    } else {
-        swapTurns();
-        setBoardHoverClass();
+  function rechercherVainqueur(pions, joueurs, tour) {
+    if (
+      pions[0].innerHTML == joueurs[tour] &&
+      pions[1].innerHTML == joueurs[tour] &&
+      pions[2].innerHTML == joueurs[tour]
+    ) {
+      pions[0].style.backgroundColor = "#9ACD32";
+      pions[1].style.backgroundColor = "#9ACD32";
+      pions[2].style.backgroundColor = "#9ACD32";
+      return true;
     }
-}
 
-function endGame(draw) {
-    if (draw) {
-        winningMessageTextElement.innerText = 'Draw!';
-    } else {
-        winningMessageTextElement.innerText = `${circleTurn ? "O's" : "X's"} Wins!`;
+    if (
+      pions[3].innerHTML == joueurs[tour] &&
+      pions[4].innerHTML == joueurs[tour] &&
+      pions[5].innerHTML == joueurs[tour]
+    ) {
+      pions[3].style.backgroundColor = "#9ACD32";
+      pions[4].style.backgroundColor = "#9ACD32";
+      pions[5].style.backgroundColor = "#9ACD32";
+      return true;
     }
-    winningMessageElement.classList.add('show');
-}
 
-function isDraw() {
-    return [...cellElements].every(cell => {
-        return cell.classList.contains(X_CLASS) || cell.classList.contains(CIRCLE_CLASS);
-    });
-}
-
-function placeMark(cell, currentClass) {
-    cell.classList.add(currentClass);
-}
-
-function swapTurns() {
-    circleTurn = !circleTurn;
-}
-
-function setBoardHoverClass() {
-    board.classList.remove(X_CLASS);
-    board.classList.remove(CIRCLE_CLASS);
-    if (circleTurn) {
-        board.classList.add(CIRCLE_CLASS);
-    } else {
-        board.classList.add(X_CLASS);
+    if (
+      pions[6].innerHTML == joueurs[tour] &&
+      pions[7].innerHTML == joueurs[tour] &&
+      pions[8].innerHTML == joueurs[tour]
+    ) {
+      pions[6].style.backgroundColor = "#9ACD32";
+      pions[7].style.backgroundColor = "#9ACD32";
+      pions[8].style.backgroundColor = "#9ACD32";
+      return true;
     }
-}
 
-function checkWin(currentClass) {
-    return WINNING_COMBINATIONS.some(combination => {
-        return combination.every(index => {
-            return cellElements[index].classList.contains(currentClass);
-        });
-    });
-}
+    if (
+      pions[0].innerHTML == joueurs[tour] &&
+      pions[3].innerHTML == joueurs[tour] &&
+      pions[6].innerHTML == joueurs[tour]
+    ) {
+      pions[0].style.backgroundColor = "#9ACD32";
+      pions[3].style.backgroundColor = "#9ACD32";
+      pions[6].style.backgroundColor = "#9ACD32";
+      return true;
+    }
+
+    if (
+      pions[1].innerHTML == joueurs[tour] &&
+      pions[4].innerHTML == joueurs[tour] &&
+      pions[7].innerHTML == joueurs[tour]
+    ) {
+      pions[1].style.backgroundColor = "#9ACD32";
+      pions[4].style.backgroundColor = "#9ACD32";
+      pions[7].style.backgroundColor = "#9ACD32";
+      return true;
+    }
+
+    if (
+      pions[2].innerHTML == joueurs[tour] &&
+      pions[5].innerHTML == joueurs[tour] &&
+      pions[8].innerHTML == joueurs[tour]
+    ) {
+      pions[2].style.backgroundColor = "#9ACD32";
+      pions[5].style.backgroundColor = "#9ACD32";
+      pions[8].style.backgroundColor = "#9ACD32";
+      return true;
+    }
+
+    if (
+      pions[0].innerHTML == joueurs[tour] &&
+      pions[4].innerHTML == joueurs[tour] &&
+      pions[8].innerHTML == joueurs[tour]
+    ) {
+      pions[0].style.backgroundColor = "#9ACD32";
+      pions[4].style.backgroundColor = "#9ACD32";
+      pions[8].style.backgroundColor = "#9ACD32";
+      return true;
+    }
+
+    if (
+      pions[2].innerHTML == joueurs[tour] &&
+      pions[4].innerHTML == joueurs[tour] &&
+      pions[6].innerHTML == joueurs[tour]
+    ) {
+      pions[2].style.backgroundColor = "#9ACD32";
+      pions[4].style.backgroundColor = "#9ACD32";
+      pions[6].style.backgroundColor = "#9ACD32";
+      return true;
+    }
+  }
+
+  function matchNul(pions) {
+    for (var i = 0, len = pions.length; i < len; i++) {
+      if (pions[i].innerHTML.length == 0) return false;
+    }
+
+    return true;
+  }
+
+  var Afficheur = function(element) {
+    var affichage = element;
+
+    function setText(message) {
+      affichage.innerHTML = message;
+    }
+
+    return { sendMessage: setText };
+  };
+
+  function main() {
+    var pions = document.querySelectorAll("#Jeu button");
+    var joueurs = ["X", "O"];
+    var tour = 0;
+    var jeuEstFini = false;
+    var afficheur = new Afficheur(document.querySelector("#StatutJeu"));
+    afficheur.sendMessage(
+      "Le jeu peut commencer ! <br /> Joueur " +
+        joueurs[tour] +
+        " c'est votre tour."
+    );
+    for (var i = 0, len = pions.length; i < len; i++) {
+      pions[i].addEventListener("click", function() {
+        if (jeuEstFini) return;
+
+        if (!estValide(this)) {
+          afficheur.sendMessage(
+            "Case occupée ! <br />Joueur " +
+              joueurs[tour] +
+              " c'est toujours à vous !"
+          );
+        } else {
+          setSymbol(this, joueurs[tour]);
+          jeuEstFini = rechercherVainqueur(pions, joueurs, tour);
+
+          if (jeuEstFini) {
+            afficheur.sendMessage(
+              "Le joueur " +
+                joueurs[tour] +
+                ' a gagné ! <br /> <a href="morpion.html">Rejouer</a>'
+            );
+            return;
+          }
+
+          if (matchNul(pions)) {
+            afficheur.sendMessage(
+              'Match Nul ! <br/> <a href="morpion.html">Rejouer</a>'
+            );
+            return;
+          }
+
+          tour++;
+          tour = tour % 2;
+          afficheur.sendMessage("Joueur " + joueurs[tour] + " c'est à vous !");
+        }
+      });
+    }
+  }
+
+  main();
