@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Brian-elm/Morpion#readme",
   "dependencies": {
+    "express": "^4.19.2",
     "jest": "^29.7.0"
   }
 }
