@@ -43,9 +43,6 @@ jobs:
     - name: Install ssh
       run: sudo apt-get update && sudo apt-get install -y ssh
 
-    - name: Install dependencies
-      run: npm install
-
     - name: Install rsync
       run: sudo apt-get update && sudo apt-get install -y rsync
 
@@ -79,4 +76,25 @@ jobs:
         SERVER_IP: ${{ secrets.SERVER_IP }}
         SERVER_USER: ${{ secrets.SERVER_USER }}
       run: |
-        rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" ./www/* $SERVER_USER@$SERVER_IP:/home/cda-l16/App/morpion-game/
+        rsync -avz -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" --exclude 'node_modules' . $SERVER_USER@$SERVER_IP:/home/cda-l16/App/morpion-game/
+
+    - name: Install dependencies on server
+      env:
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "cd /home/cda-l16/App/morpion-game && npm install"
+
+    - name: Restart application with PM2 on server
+      env:
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "pm2 restart morpion-game || pm2 start /home/cda-l16/App/morpion-game/index.js --name morpion-game"
+
+    - name: Restart Nginx
+      env:
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        SERVER_USER: ${{ secrets.SERVER_USER }}
+      run: |
+        ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_IP "sudo /bin/systemctl restart nginx"
