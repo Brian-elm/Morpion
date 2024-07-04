@@ -4,6 +4,7 @@
   "description": "Jeux morpion CICD",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "jest"
   },
   "repository": {
