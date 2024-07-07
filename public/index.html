@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeu de Morpion</title>
+    <title>Morpy</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="img/favicon.ico" type="image/x-icon">
 </head>
 <body>
     <div id="container">
@@ -40,5 +41,20 @@
         </aside>
     </div>
     <script src="script.js"></script>
+    <script>
+        // Liste des images de fond disponibles
+        const images = [
+            '/img/wallpaper-0.jpg',
+            '/img/wallpaper-1.jpg',
+            '/img/wallpaper-2.jpg',
+            '/img/wallpaper-3.jpg'
+        ];
+
+        // Sélectionne une image aléatoire
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+
+        // Applique l'image de fond au body
+        document.body.style.backgroundImage = `url(${randomImage})`;
+    </script>
 </body>
 </html>
